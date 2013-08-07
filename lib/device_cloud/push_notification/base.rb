@@ -21,8 +21,13 @@ module DeviceCloud
     end
 
     def full_path
-      return '' unless id
-      id.join
+      return '' unless id.size > 0
+      id['fdPath'] + id['fdName']
+    end
+
+    def mac_address
+      return '' unless device_id.size > 0
+      device_id.sub(/\Am:/, '').scan(/.{2}|.+/).join(':')
     end
 
     def data
