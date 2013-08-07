@@ -1,6 +1,6 @@
 module DeviceCloud
   class PushNotification::Base
-    attr_reader :id, :device_id, :value, :queued_at, :type
+    attr_reader :id, :full_path, :device_id, :value, :queued_at, :type
     
     def self.handle!(file_data)
       event = new(file_data)
@@ -10,6 +10,7 @@ module DeviceCloud
     def initialize(file_data)
       @file_data = file_data
       @id = data["id"]
+      @full_path = file_data.full_path
       @device_id = data["device_id"]
       @type = data["type"]
       @queued_at = data["queued_dt"]
@@ -18,11 +19,6 @@ module DeviceCloud
 
     def handle!
       raise NotImplementedError
-    end
-
-    def full_path
-      return '' unless id.size > 0
-      id['fdPath'] + id['fdName']
     end
 
     def mac_address
