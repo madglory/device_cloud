@@ -33,6 +33,10 @@ module DeviceCloud
       !!file_data && topic_allowed?
     end
 
+    def valid_parsed_file_data?
+      parsed_file_data.valid?
+    end
+
     def topic_type
       topic_matches.first
     end
