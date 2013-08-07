@@ -1,4 +1,5 @@
 require 'device_cloud'
+require 'ostruct'
 
 RSpec.configure do |config|
   config.mock_with :rspec

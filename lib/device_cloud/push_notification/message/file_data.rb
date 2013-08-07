@@ -1,3 +1,6 @@
+require 'json'
+require 'base64'
+
 module DeviceCloud
   class PushNotification::Message::FileData
     attr_accessor :id, :fdLastModifiedDate, :fdSize, :fdContentType, :fdData, :fdArchive, :cstId, :fdType, :fdCreatedDate
@@ -8,7 +11,7 @@ module DeviceCloud
       attributes.each do |name, value|
         send("#{name}=", value)
       end
-      Rails.logger.warn "DeviceCloud::PushNotification::Message::FileData Invalid (#{errors.join(',')}) - #{full_path}" unless valid?
+      DeviceCloud.logger.warn "DeviceCloud::PushNotification::Message::FileData Invalid (#{errors.join(',')}) - #{full_path}" unless valid?
     end
 
     def full_path
@@ -21,12 +24,12 @@ module DeviceCloud
     end
 
     def file_name
-      return '' unless id.present?
+      return '' unless id
       id['fdName']
     end
 
     def file_path
-      return '' unless id.present?
+      return '' unless id
       id['fdPath']
     end
 
@@ -50,7 +53,7 @@ module DeviceCloud
     end
 
     def validate_content!
-      if fdData.blank? || fdSize.to_i < 1
+      if fdData.size == 0 || fdSize.to_i < 1
         @errors << 'no content'
         false
       else

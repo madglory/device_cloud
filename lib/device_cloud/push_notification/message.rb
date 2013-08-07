@@ -15,9 +15,13 @@ module DeviceCloud
 
     def initialize(attributes = {})
       attributes.each do |name, value|
-        send("#{name.underscore}=", value)
+        if name == 'FileData'
+          @file_data = value
+        else
+          send("#{name}=", value)
+        end
       end
-      Rails.logger.warn "DeviceCloud::PushNotification::Message Invalid (no content) - #{topic}" unless valid?
+      DeviceCloud.logger.warn "DeviceCloud::PushNotification::Message Invalid (no content) - #{topic}" unless valid?
     end
 
     def parsed_file_data
@@ -26,7 +30,7 @@ module DeviceCloud
     end
 
     def valid?
-      file_data.present? && topic_allowed?
+      !!file_data && topic_allowed?
     end
 
     def topic_type
@@ -35,7 +39,7 @@ module DeviceCloud
 
   private
     def topic_allowed?
-      return false if topic.blank?
+      return false if !topic
       topic_matches.any?
     end
 

@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe DeviceCloud::PushNotification::Message::FileData do
-  before(:each) do
-    Meter.stub(:find_by_mac_address).and_return(true)
-  end
-  
   let(:raw_file_data) do
     {
       "id" => {
@@ -22,20 +18,21 @@ describe DeviceCloud::PushNotification::Message::FileData do
     }
   end
 
-  it "should assign the properly formatted attributes" do
-    file_data = DeviceCloud::PushNotification::Message::FileData.new raw_file_data
+  describe "attributes" do
+    subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
 
-    expect(file_data.id).to eq(raw_file_data['id'])
-    expect(file_data.fdLastModifiedDate).to eq(raw_file_data['fdLastModifiedDate'])
-    expect(file_data.fdSize).to eq(raw_file_data['fdSize'])
-    expect(file_data.fdArchive).to eq(raw_file_data['fdArchive'])
-    expect(file_data.cstId).to eq(raw_file_data['cstId'])
-    expect(file_data.fdType).to eq(raw_file_data['fdType'])
-    expect(file_data.fdCreatedDate).to eq(raw_file_data['fdCreatedDate'])
-    expect(file_data.fdData).to eq(raw_file_data["fdData"])
+    its(:id) { should eq(raw_file_data['id']) }
+    its(:fdLastModifiedDate) { should eq(raw_file_data['fdLastModifiedDate']) }
+    its(:fdSize) { should eq(raw_file_data['fdSize']) }
+    its(:fdArchive) { should eq(raw_file_data['fdArchive']) }
+    its(:cstId) { should eq(raw_file_data['cstId']) }
+    its(:fdType) { should eq(raw_file_data['fdType']) }
+    its(:fdCreatedDate) { should eq(raw_file_data['fdCreatedDate']) }
+    its(:fdData) { should eq(raw_file_data["fdData"]) }
   end
 
   describe '#valid?' do
+    subject { DeviceCloud::PushNotification::Message::FileData.new }
     context 'wrong file type' do
       let(:raw_file_data) do
         {

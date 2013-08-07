@@ -1,14 +1,19 @@
+require 'logger'
+
 module DeviceCloud
   module Configuration
 
-    # DeviceCloud root_url
+    # DeviceCloud account root_url
     attr_writer :root_url
 
-    # DeviceCloud username
+    # DeviceCloud account username
     attr_writer :username
 
-    # DeviceCloud password
+    # DeviceCloud account password
     attr_writer :password
+
+    # DeviceCloud defualt logger
+    attr_writer :logger
 
     # Proc that will be called for handling
     # DeviceCloud::PushNotification::Event objects
@@ -52,7 +57,14 @@ module DeviceCloud
     # @return the DeviceCloud password or raises an error
     def password
       raise 'DeviceCloud password is blank' if @password.blank?
-      @root_url
+      @password
+    end
+
+    # DeviceCloud logger
+    #
+    # @return the DeviceCloud logger or set the default to stdout
+    def logger
+      @root_url ||= Logger.new(STDOUT)
     end
   end
 end
