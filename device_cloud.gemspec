@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = DeviceCloud::VERSION
   spec.authors       = ["Erik Straub"]
   spec.email         = ["erik@madgloryint.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = %q{A Ruby wrapper for the Etherios Device Cloud}
+  spec.summary       = %q{A Ruby wrapper for the Etherios Device Cloud}
+  spec.homepage      = "http://github.com/madgloryint/device_cloud"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
