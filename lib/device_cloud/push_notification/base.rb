@@ -20,6 +20,11 @@ module DeviceCloud
       raise NotImplementedError
     end
 
+    def full_path
+      return '' unless id
+      id.join
+    end
+
     def data
       @file_data.data
     end
