@@ -64,7 +64,7 @@ module DeviceCloud
     #
     # @return the DeviceCloud logger or set the default to stdout
     def logger
-      @root_url ||= Logger.new(STDOUT)
+      @logger ||= Logger.new(STDOUT)
     end
   end
 end
