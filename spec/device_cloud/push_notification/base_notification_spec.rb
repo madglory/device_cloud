@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DeviceCloud::PushNotification::Base do
+describe DeviceCloud::PushNotification::BaseNotification do
   let(:data) do
     {
       'id' => '1234',
@@ -18,7 +18,7 @@ describe DeviceCloud::PushNotification::Base do
     )
   end
 
-  subject { DeviceCloud::PushNotification::Base.new file_data }
+  subject { DeviceCloud::PushNotification::BaseNotification.new file_data }
 
   describe "attributes" do
     its(:id) { should eq data['id'] }

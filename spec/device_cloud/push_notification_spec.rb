@@ -4,7 +4,8 @@ describe DeviceCloud::PushNotification do
   let(:raw_messages) do
     [
       { 'topic_type' => 'an alert' },
-      { 'topic_type' => 'an event' }
+      { 'topic_type' => 'an event' },
+      { 'topic_type' => 'a piece of data' }
     ]
   end
   let(:valid_parsed_messages) do
@@ -20,6 +21,12 @@ describe DeviceCloud::PushNotification do
         valid_parsed_file_data?: true,
         topic_type: 'event',
         parsed_file_data: 'the event data'
+      ),
+      OpenStruct.new(
+        valid?: true,
+        valid_parsed_file_data?: true,
+        topic_type: 'data',
+        parsed_file_data: 'the data data'
       )
     ]
   end
@@ -41,9 +48,11 @@ describe DeviceCloud::PushNotification do
     context "all valid" do
 
       it "should call handle! on each of the message's topic_type classes" do
-        DeviceCloud::PushNotification::Alert.should_receive(:handle!).with(valid_parsed_messages[0].parsed_file_data)
+        DeviceCloud::PushNotification::AlertNotification.should_receive(:handle!).with(valid_parsed_messages[0].parsed_file_data)
 
-        DeviceCloud::PushNotification::Event.should_receive(:handle!).with(valid_parsed_messages[1].parsed_file_data)
+        DeviceCloud::PushNotification::EventNotification.should_receive(:handle!).with(valid_parsed_messages[1].parsed_file_data)
+
+        DeviceCloud::PushNotification::DataNotification.should_receive(:handle!).with(valid_parsed_messages[2].parsed_file_data)
 
         subject.handle_each!
 
@@ -59,9 +68,10 @@ describe DeviceCloud::PushNotification do
           parsed_file_data: 'the alert data'
         )
 
-        DeviceCloud::PushNotification::Alert.should_not_receive(:handle!)
+        DeviceCloud::PushNotification::AlertNotification.should_not_receive(:handle!)
 
-        DeviceCloud::PushNotification::Event.should_receive(:handle!)
+        DeviceCloud::PushNotification::EventNotification.should_receive(:handle!)
+        DeviceCloud::PushNotification::DataNotification.should_receive(:handle!)
 
         subject.handle_each!
       end
@@ -76,9 +86,10 @@ describe DeviceCloud::PushNotification do
           parsed_file_data: 'the alert data'
         )
 
-        DeviceCloud::PushNotification::Alert.should_not_receive(:handle!)
+        DeviceCloud::PushNotification::AlertNotification.should_not_receive(:handle!)
 
-        DeviceCloud::PushNotification::Event.should_receive(:handle!)
+        DeviceCloud::PushNotification::EventNotification.should_receive(:handle!)
+        DeviceCloud::PushNotification::DataNotification.should_receive(:handle!)
 
         subject.handle_each!
       end

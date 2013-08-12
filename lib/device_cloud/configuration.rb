@@ -16,14 +16,20 @@ module DeviceCloud
     attr_writer :logger
 
     # Proc that will be called for handling
-    # DeviceCloud::PushNotification::Event objects
-    # Proc will be called with the event object
-    attr_accessor :push_notification_event_handler
+    # DeviceCloud::PushNotification::EventNotification objects
+    # Proc will be called with the event notification object
+    attr_accessor :event_notification_handler
 
     # Proc that will be called for handling
-    # DeviceCloud::PushNotification::Alert objects
-    # Proc will be called with the alert object
-    attr_accessor :push_notification_alert_handler
+    # DeviceCloud::PushNotification::AlertNotification objects
+    # Proc will be called with the alert notification object
+    attr_accessor :alert_notification_handler
+
+    # Proc that will be called for handling
+    # DeviceCloud::PushNotification::DataNotification objects
+    # Proc will be called with the data notification object
+    attr_accessor :data_notification_handler
+
 
     # Yield self to be able to configure ActivityFeed with
     # block-style configuration.

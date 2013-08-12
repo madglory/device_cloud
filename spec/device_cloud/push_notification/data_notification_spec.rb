@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DeviceCloud::PushNotification::Alert do
+describe DeviceCloud::PushNotification::DataNotification do
   describe "#handle!" do
     let(:data) do
       {
@@ -13,14 +13,14 @@ describe DeviceCloud::PushNotification::Alert do
     end
     let(:file_data) { OpenStruct.new(data: data, full_path: '/foo/bar/baz.json') }
 
-    subject { DeviceCloud::PushNotification::Alert.new file_data }
+    subject { DeviceCloud::PushNotification::DataNotification.new file_data }
 
-    it "should call the DeviceCloud.push_notification_alert_handler with self" do
-      handled_alert = nil
-      DeviceCloud.push_notification_alert_handler = ->(alert) { handled_alert = alert }
+    it "should call the DeviceCloud.data_notification_handler with self" do
+      handled_data = nil
+      DeviceCloud.data_notification_handler = ->(data) { handled_data = data }
 
       subject.handle!
-      expect(handled_alert).to eq subject
+      expect(handled_data).to eq subject
     end
   end
 end

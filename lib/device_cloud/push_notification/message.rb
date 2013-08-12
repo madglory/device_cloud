@@ -2,7 +2,7 @@ module DeviceCloud
   class PushNotification::Message
     attr_accessor :timestamp, :topic, :file_data, :operation, :group, :replay
 
-    ALLOWED_TOPICS = %w{alert event}
+    ALLOWED_TOPICS = %w{alert event data}
 
     def self.parse_raw_messages(raw_message_data)
       if raw_message_data.is_a? Array

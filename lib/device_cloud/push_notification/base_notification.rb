@@ -1,5 +1,5 @@
 module DeviceCloud
-  class PushNotification::Base
+  class PushNotification::BaseNotification
     attr_reader :id, :full_path, :device_id, :value, :queued_at, :type
     
     def self.handle!(file_data)

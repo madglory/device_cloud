@@ -17,7 +17,7 @@ module DeviceCloud
     end
   private
     def class_type(class_name)
-      DeviceCloud.constantize "DeviceCloud::PushNotification::#{class_name.capitalize}"
+      DeviceCloud.constantize "DeviceCloud::PushNotification::#{class_name.capitalize}Notification"
     end
   end
 end
