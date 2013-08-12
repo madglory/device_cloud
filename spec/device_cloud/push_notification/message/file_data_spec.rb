@@ -18,9 +18,9 @@ describe DeviceCloud::PushNotification::Message::FileData do
     }
   end
 
-  describe "attributes" do
-    subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
+  subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
 
+  describe "attributes" do
     its(:id) { should eq(raw_file_data['id']) }
     its(:fdLastModifiedDate) { should eq(raw_file_data['fdLastModifiedDate']) }
     its(:fdSize) { should eq(raw_file_data['fdSize']) }
@@ -32,32 +32,6 @@ describe DeviceCloud::PushNotification::Message::FileData do
   end
 
   describe '#valid?' do
-    subject { DeviceCloud::PushNotification::Message::FileData.new }
-    context 'wrong file type' do
-      let(:raw_file_data) do
-        {
-          "id" => {
-            "fdPath" => "/db/4044_MadGlory_Interactive/00000000-00000000-001395FF-FF0E6014/",
-            "fdName" => "event"
-          },
-          "fdLastModifiedDate" => "2013-06-26T16:18:39.675Z",
-          "fdSize" => 0,
-          "fdContentType" => "application/octet-stream",
-          "fdArchive" => false,
-          "cstId" => 4044,
-          "fdType" => "directory",
-          "fdCreatedDate" => "2013-06-26T16:18:39.675Z"
-        }
-      end
-
-      subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data}
-      its(:valid?) { should be_false }
-      it "should set a 'wrong file type' error" do
-        subject.valid?
-        expect(subject.errors.include?('wrong file type')).to be_true
-      end
-    end
-
     context 'without content' do
       let(:raw_file_data) do
         {
@@ -78,7 +52,7 @@ describe DeviceCloud::PushNotification::Message::FileData do
 
       subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data}
       its(:valid?) { should be_false }
-      it "should set a 'wrong file type' error" do
+      it "should set a 'no content' error" do
         subject.valid?
         expect(subject.errors.include?('no content')).to be_true
       end
@@ -93,6 +67,7 @@ describe DeviceCloud::PushNotification::Message::FileData do
     end
 
     context "when id blank" do
+      subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data.merge( 'id' => nil ) }
       its(:file_path) { should eq '' }
     end
   end
@@ -105,18 +80,34 @@ describe DeviceCloud::PushNotification::Message::FileData do
     end
 
     context "when id blank" do
+      subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data.merge( 'id' => nil ) }
       its(:file_name) { should eq '' }
     end
   end
 
   describe "#data" do
     context 'when valid' do
-      subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
+      context "json content-type" do
+        subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
+        its(:data) { should eq(JSON.parse(Base64.decode64(raw_file_data['fdData']))) }
+      end
 
-      its(:data) { should eq(JSON.parse(Base64.decode64(raw_file_data['fdData']))) }
+      context "non-json content-type" do
+        before(:each) do
+          raw_file_data['fdContentType'] = 'foobar'
+          raw_file_data['id']['fdName'] = 'not_json.jpg'
+        end
+        subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
+
+        its(:data) { should eq(Base64.decode64(raw_file_data['fdData'])) }
+      end
     end
 
     context 'when invalid' do
+      subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data.merge('fdData' => '') }
+      its(:data) { should be_false }
+
+      subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data.merge('fdData' => nil) }
       its(:data) { should be_false }
     end
   end
@@ -125,5 +116,11 @@ describe DeviceCloud::PushNotification::Message::FileData do
     subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
 
     its(:full_path) { should eq(raw_file_data['id']['fdPath'] + raw_file_data['id']['fdName']) }
+  end
+
+  describe "#content_type" do
+    subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
+
+    its(:content_type) { should eq raw_file_data['fdContentType'] }
   end
 end

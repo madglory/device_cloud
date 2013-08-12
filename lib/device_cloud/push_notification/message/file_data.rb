@@ -18,9 +18,17 @@ module DeviceCloud
       file_path + file_name
     end
 
+    def content_type
+      fdContentType
+    end
+
     def data
       return false unless valid?
-      @data ||= JSON.parse unencoded_data
+      @data ||= if json_data?
+        JSON.parse unencoded_data
+      else
+        unencoded_data
+      end
     end
 
     def file_name
@@ -35,25 +43,19 @@ module DeviceCloud
 
     def valid?
       return false if @errors.any?
-      validate_content_type! && validate_content!
+      validate_content!
     end
   private
+    def json_data?
+      fdContentType =~ /json/ || file_name =~ /\.json\z/
+    end
 
     def unencoded_data
       @unencode_data ||= Base64.decode64(fdData)
     end
 
-    def validate_content_type!
-      if file_name =~ /\.json/
-        true
-      else
-        @errors << 'wrong file type'
-        false
-      end
-    end
-
     def validate_content!
-      if fdData.size == 0 || fdSize.to_i < 1
+      if !fdData || fdData.size == 0 || fdSize.to_i < 1
         @errors << 'no content'
         false
       else
