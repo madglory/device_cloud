@@ -22,8 +22,7 @@ module DeviceCloud
     end
 
     def file_name
-      return '' unless id
-      id['fdName']
+      @file_data.file_name
     end
 
     def mac_address

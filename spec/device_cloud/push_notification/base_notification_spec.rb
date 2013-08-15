@@ -14,7 +14,7 @@ describe DeviceCloud::PushNotification::BaseNotification do
     OpenStruct.new(
       full_path: '/some/place/file_name.json',
       data: data,
-      full_path: '/foo/bar/baz.json'
+      file_name: 'file_name.json'
     )
   end
 
@@ -55,14 +55,7 @@ describe DeviceCloud::PushNotification::BaseNotification do
 
   describe "#file_name" do
     context 'when id is present' do
-      its(:file_name) { should eq data['id']['fdName']}
-    end
-
-    context 'when id is nil' do
-      before(:each) do
-        data['id'] = nil
-      end
-      its(:file_name) { should eq '' }
+      its(:file_name) { should eq file_data.file_name}
     end
   end
 end
