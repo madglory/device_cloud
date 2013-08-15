@@ -21,6 +21,11 @@ module DeviceCloud
       raise NotImplementedError
     end
 
+    def file_name
+      return '' unless id
+      id['fdName']
+    end
+
     def mac_address
       return '' unless device_id.size > 0
       device_id.sub(/\Am:/, '').scan(/.{2}|.+/).join(':')

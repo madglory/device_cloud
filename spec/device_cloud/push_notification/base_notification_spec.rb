@@ -29,6 +29,10 @@ describe DeviceCloud::PushNotification::BaseNotification do
     its(:value) { should eq data['value'] }
   end
 
+  describe "#data" do
+    its(:data) { should eq file_data.data }
+  end
+
   describe "#handle!" do
     it "should raise NotImplementedError" do
       expect{subject.handle!}.to raise_error NotImplementedError
@@ -46,6 +50,19 @@ describe DeviceCloud::PushNotification::BaseNotification do
       end
 
       its(:mac_address) { should eq '' }
+    end
+  end
+
+  describe "#file_name" do
+    context 'when id is present' do
+      its(:file_name) { should eq data['id']['fdName']}
+    end
+
+    context 'when id is nil' do
+      before(:each) do
+        data['id'] = nil
+      end
+      its(:file_name) { should eq '' }
     end
   end
 end
