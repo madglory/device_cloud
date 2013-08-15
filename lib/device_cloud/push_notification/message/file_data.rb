@@ -51,7 +51,7 @@ module DeviceCloud
     end
 
     def unencoded_data
-      @unencode_data ||= Base64.decode64(fdData)
+      @unencoded_data ||= Base64.decode64(fdData)
     end
 
     def validate_content!
