@@ -1,6 +1,8 @@
 # DeviceCloud
 
-TODO: Write a gem description
+TODO:
+- remove any assumptions about Device Cloud FileData contents .. probably should only parse them if asked
+- add code for maintaining monitors 
 
 ## Installation
 
