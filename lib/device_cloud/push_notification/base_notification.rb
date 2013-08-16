@@ -25,8 +25,12 @@ module DeviceCloud
       @file_data.file_name
     end
 
+    def raw_data
+      @file_data.fdData
+    end
+
     def mac_address
-      return '' unless device_id.size > 0
+      return '' unless device_id
       device_id.sub(/\Am:/, '').scan(/.{2}|.+/).join(':')
     end
 

@@ -32,8 +32,4 @@ describe DeviceCloud::PushNotification::DataNotification do
       expect(handled_data).to eq subject
     end
   end
-
-  describe "#raw_data" do
-    its(:raw_data) { should eq raw_file_data['fdData'] }
-  end
 end
