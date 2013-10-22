@@ -4,14 +4,14 @@ require 'base64'
 module DeviceCloud
   class PushNotification::Message::FileData
     attr_accessor :id, :fdLastModifiedDate, :fdSize, :fdContentType, :fdData, :fdArchive, :cstId, :fdType, :fdCreatedDate
-    attr_reader :errors
+    attr_reader :no_content
 
     def initialize(attributes = {})
-      @errors = []
+      @no_content = false
       attributes.each do |name, value|
         send("#{name}=", value)
       end
-      DeviceCloud.logger.warn "DeviceCloud::PushNotification::Message::FileData Invalid (#{errors.join(',')}) - #{full_path}" unless valid?
+      validate_content!
     end
 
     def full_path
@@ -23,8 +23,7 @@ module DeviceCloud
     end
 
     def data
-      return false unless valid?
-      @data ||= if json_data?
+      @data ||= if json_data? && content?
         JSON.parse unencoded_data
       else
         unencoded_data
@@ -32,18 +31,21 @@ module DeviceCloud
     end
 
     def file_name
-      return '' unless id
+      return '' unless id && id['fdName']
       id['fdName']
     end
 
     def file_path
-      return '' unless id
+      return '' unless id && id['fdPath']
       id['fdPath']
     end
 
-    def valid?
-      return false if @errors.any?
-      validate_content!
+    def no_content?
+      @no_content
+    end
+
+    def content?
+      !no_content?
     end
   private
     def json_data?
@@ -51,16 +53,11 @@ module DeviceCloud
     end
 
     def unencoded_data
-      @unencoded_data ||= Base64.decode64(fdData)
+      @unencoded_data ||= no_content? ? '' : Base64.decode64(fdData)
     end
 
     def validate_content!
-      if !fdData || fdData.size == 0 || fdSize.to_i < 1
-        @errors << 'no content'
-        false
-      else
-        true
-      end
+      @no_content = !fdData || fdData.size == 0 || fdSize.to_i < 1
     end
   end
 end

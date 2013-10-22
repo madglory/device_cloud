@@ -31,31 +31,59 @@ describe DeviceCloud::PushNotification::Message::FileData do
     its(:fdData) { should eq(raw_file_data["fdData"]) }
   end
 
-  describe '#valid?' do
-    context 'without content' do
-      let(:raw_file_data) do
+  describe '#no_content?' do
+    let(:raw_file_data) do
+      {
+        "id" => {
+          "fdPath" => " /db/4044_MadGlory_Interactive/00000000-00000000-001395FF-FF0E6012/alert/",
+          "fdName" => "foo-0966595cdcdd11e2abf50013950e6012.json"
+        },
+        "fdLastModifiedDate" => "2013-06-24T14:52:55.421Z",
+        "fdSize" => 156,
+        "fdContentType" => "application/octet-stream",
+        "fdData" => fd_data_content,
+        "fdArchive" => false,
+        "cstId" => 4044,
+        "fdType" => "file",
+        "fdCreatedDate" => "2013-06-24T14:52:55.421Z"
+      }
+    end
+    subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
+
+    context 'when fdData blank' do
+      let(:fd_data_content) { '' }
+      its(:no_content?) { should be_true }
+    end
+
+    context 'when fdData null' do
+      let(:fd_data_content) { nil }
+      its(:no_content?) { should be_true }
+    end
+
+    context 'when fdData missing' do
+      let(:missing_fd_data) do
         {
           "id" => {
             "fdPath" => " /db/4044_MadGlory_Interactive/00000000-00000000-001395FF-FF0E6012/alert/",
             "fdName" => "foo-0966595cdcdd11e2abf50013950e6012.json"
           },
           "fdLastModifiedDate" => "2013-06-24T14:52:55.421Z",
-          "fdSize" => 156,
+          "fdSize" => 0,
           "fdContentType" => "application/octet-stream",
-          "fdData" => "",
           "fdArchive" => false,
           "cstId" => 4044,
           "fdType" => "file",
           "fdCreatedDate" => "2013-06-24T14:52:55.421Z"
         }
       end
+      subject { DeviceCloud::PushNotification::Message::FileData.new missing_fd_data }
+      its(:no_content?) { should be_true }
+    end
 
-      subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data}
-      its(:valid?) { should be_false }
-      it "should set a 'no content' error" do
-        subject.valid?
-        expect(subject.errors.include?('no content')).to be_true
-      end
+    context 'when fdData present' do
+      let(:fd_data_content) { 'jibberish' }
+      subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
+      its(:no_content) { should be_false }
     end
   end
 
@@ -66,8 +94,13 @@ describe DeviceCloud::PushNotification::Message::FileData do
       its(:file_path) { should eq raw_file_data['id']['fdPath'] }
     end
 
-    context "when id blank" do
+    context "when id not present" do
       subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data.merge( 'id' => nil ) }
+      its(:file_path) { should eq '' }
+    end
+
+    context "when id blank" do
+      subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data.merge( 'id' => '' ) }
       its(:file_path) { should eq '' }
     end
   end
@@ -79,14 +112,19 @@ describe DeviceCloud::PushNotification::Message::FileData do
       its(:file_name) { should eq raw_file_data['id']['fdName'] }
     end
 
-    context "when id blank" do
+    context "when id not present" do
       subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data.merge( 'id' => nil ) }
+      its(:file_name) { should eq '' }
+    end
+
+    context "when id blank" do
+      subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data.merge( 'id' => '' ) }
       its(:file_name) { should eq '' }
     end
   end
 
   describe "#data" do
-    context 'when valid' do
+    context 'when content present' do
       context "json content-type" do
         subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data }
         its(:data) { should eq(JSON.parse(Base64.decode64(raw_file_data['fdData']))) }
@@ -103,12 +141,12 @@ describe DeviceCloud::PushNotification::Message::FileData do
       end
     end
 
-    context 'when invalid' do
+    context 'when content not present' do
       subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data.merge('fdData' => '') }
-      its(:data) { should be_false }
+      its(:data) { should eq '' }
 
       subject { DeviceCloud::PushNotification::Message::FileData.new raw_file_data.merge('fdData' => nil) }
-      its(:data) { should be_false }
+      its(:data) { should eq '' }
     end
   end
 

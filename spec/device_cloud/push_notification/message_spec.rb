@@ -104,31 +104,45 @@ describe DeviceCloud::PushNotification::Message do
     end
 
     describe "#valid?" do
-      context "with file_data and allowed topic" do
-        subject { DeviceCloud::PushNotification::Message.new 'FileData' => 'present', 'topic' => DeviceCloud::PushNotification::Message::ALLOWED_TOPICS.sample }
+      context "with file_data" do
+        subject { DeviceCloud::PushNotification::Message.new 'FileData' => 'present' }
         its(:valid?) { should be_true }
       end
 
       context "without file_data" do
-        subject { DeviceCloud::PushNotification::Message.new 'topic' => DeviceCloud::PushNotification::Message::ALLOWED_TOPICS.sample }
-        its(:valid?) { should_not be_true }
-      end
+        let(:logger) { double('logger') }
+        before(:each) do
+          DeviceCloud.logger = logger
+          logger.should_receive(:info)
+        end
 
-      context "without allowed topic" do
-        subject { DeviceCloud::PushNotification::Message.new 'FileData' => 'present' }
+        after(:each) do
+          DeviceCloud.logger = Logger.new(STDOUT)
+        end
+
+        subject { DeviceCloud::PushNotification::Message.new }
         its(:valid?) { should_not be_true }
       end
     end
 
     describe "#parsed_file_data" do
       context "when invalid" do
+        let(:logger) { double('logger') }
+        before(:each) do
+          DeviceCloud.logger = logger
+          logger.should_receive(:info)
+        end
+
+        after(:each) do
+          DeviceCloud.logger = Logger.new(STDOUT)
+        end
         it "should be false" do
           expect(subject.parsed_file_data).to be_false
         end
       end
 
       context "when valid" do
-        subject { DeviceCloud::PushNotification::Message.new 'FileData' => single_raw_message["FileData"], 'topic' => DeviceCloud::PushNotification::Message::ALLOWED_TOPICS.sample }
+        subject { DeviceCloud::PushNotification::Message.new 'FileData' => single_raw_message["FileData"] }
 
         it "should return a DeviceCloud::PushNotification::Message::FileData object" do
           expect(subject.parsed_file_data.class).to eq(DeviceCloud::PushNotification::Message::FileData)

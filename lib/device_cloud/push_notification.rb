@@ -8,11 +8,11 @@ module DeviceCloud
 
     def handle_each!
       messages.each do |message|
-        next unless message.valid? && message.valid_parsed_file_data?
+        next unless message.valid?
 
         klass = class_type(message.topic_type)
-        
-        klass.handle!(message.parsed_file_data)
+
+        message.no_content? ? klass.handle_no_content!(message.parsed_file_data) : klass.handle!(message.parsed_file_data)
       end
     end
   private

@@ -7,6 +7,11 @@ module DeviceCloud
       event.handle!
     end
 
+    def self.handle_no_content!(file_data)
+      event = new(file_data)
+      event.hanlde_no_content!
+    end
+
     def initialize(file_data)
       @file_data = file_data
       @id = data["id"]
@@ -19,6 +24,10 @@ module DeviceCloud
 
     def handle!
       raise NotImplementedError
+    end
+
+    def handle_no_content!
+      DeviceCloud.logger.info "DeviceCloud::PushNotification::BaseNotification - No FileData content - NotImplemented #{@full_path}"
     end
 
     def file_name

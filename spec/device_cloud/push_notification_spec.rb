@@ -12,19 +12,34 @@ describe DeviceCloud::PushNotification do
     [
       OpenStruct.new(
         valid?: true,
-        valid_parsed_file_data?: true,
         topic_type: 'alert',
         parsed_file_data: 'the alert data'
       ),
       OpenStruct.new(
         valid?: true,
-        valid_parsed_file_data?: true,
         topic_type: 'event',
         parsed_file_data: 'the event data'
       ),
       OpenStruct.new(
         valid?: true,
-        valid_parsed_file_data?: true,
+        topic_type: 'data',
+        parsed_file_data: 'the data data'
+      ),
+      OpenStruct.new(
+        valid?: true,
+        no_content?: true,
+        topic_type: 'alert',
+        parsed_file_data: 'the alert data'
+      ),
+      OpenStruct.new(
+        valid?: true,
+        no_content?: true,
+        topic_type: 'event',
+        parsed_file_data: 'the event data'
+      ),
+      OpenStruct.new(
+        valid?: true,
+        no_content?: true,
         topic_type: 'data',
         parsed_file_data: 'the data data'
       )
@@ -54,6 +69,12 @@ describe DeviceCloud::PushNotification do
 
         DeviceCloud::PushNotification::DataNotification.should_receive(:handle!).with(valid_parsed_messages[2].parsed_file_data)
 
+        DeviceCloud::PushNotification::AlertNotification.should_receive(:handle_no_content!).with(valid_parsed_messages[3].parsed_file_data)
+
+        DeviceCloud::PushNotification::EventNotification.should_receive(:handle_no_content!).with(valid_parsed_messages[4].parsed_file_data)
+
+        DeviceCloud::PushNotification::DataNotification.should_receive(:handle_no_content!).with(valid_parsed_messages[5].parsed_file_data)
+
         subject.handle_each!
 
       end
@@ -63,7 +84,6 @@ describe DeviceCloud::PushNotification do
       it "should not be handled" do
         valid_parsed_messages[0] = OpenStruct.new(
           valid?: false, # test condition
-          valid_parsed_file_data?: true,
           topic_type: 'alert',
           parsed_file_data: 'the alert data'
         )
@@ -73,23 +93,11 @@ describe DeviceCloud::PushNotification do
         DeviceCloud::PushNotification::EventNotification.should_receive(:handle!)
         DeviceCloud::PushNotification::DataNotification.should_receive(:handle!)
 
-        subject.handle_each!
-      end
-    end
+        DeviceCloud::PushNotification::AlertNotification.should_receive(:handle_no_content!)
 
-    context "an invalid parsed_file_data" do
-      it "should not be handled" do
-        valid_parsed_messages[0] = OpenStruct.new(
-          valid?: true,
-          valid_parsed_file_data?: false, # test condition
-          topic_type: 'alert',
-          parsed_file_data: 'the alert data'
-        )
-
-        DeviceCloud::PushNotification::AlertNotification.should_not_receive(:handle!)
-
-        DeviceCloud::PushNotification::EventNotification.should_receive(:handle!)
-        DeviceCloud::PushNotification::DataNotification.should_receive(:handle!)
+        DeviceCloud::PushNotification::EventNotification.should_receive(:handle_no_content!)
+        
+        DeviceCloud::PushNotification::DataNotification.should_receive(:handle_no_content!)
 
         subject.handle_each!
       end

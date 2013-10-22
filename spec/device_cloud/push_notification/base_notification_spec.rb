@@ -5,7 +5,7 @@ describe DeviceCloud::PushNotification::BaseNotification do
   let(:raw_file_data) do
     {
       "id" => {
-        "fdPath" => " /db/4044_MadGlory_Interactive/00000000-00000000-001395FF-FF0E6012/alert/",
+        "fdPath" => "/db/4044_MadGlory_Interactive/00000000-00000000-001395FF-FF0E6012/alert/",
         "fdName" => "foo-0966595cdcdd11e2abf50013950e6012.json"
       },
       "fdLastModifiedDate" => "2013-06-24T14:52:55.421Z",
@@ -39,6 +39,22 @@ describe DeviceCloud::PushNotification::BaseNotification do
   describe "#handle!" do
     it "should raise NotImplementedError" do
       expect{subject.handle!}.to raise_error NotImplementedError
+    end
+  end
+
+  describe "#handle_no_content!" do
+    let(:logger) { double('logger') }
+    before(:each) do
+      DeviceCloud.logger = logger
+    end
+
+    after(:each) do
+      DeviceCloud.logger = Logger.new(STDOUT)
+    end
+
+    it "should raise NotImplementedError" do
+      logger.should_receive(:info).with("DeviceCloud::PushNotification::BaseNotification - No FileData content - NotImplemented #{raw_file_data['id']['fdPath']}#{raw_file_data['id']['fdName']}")
+      subject.handle_no_content!
     end
   end
 
