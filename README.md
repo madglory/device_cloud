@@ -32,7 +32,7 @@ TODO: Write usage instructions here
       "topic": "4044/FileData/db/4044_MadGlory_Interactive/00000000-00000000-001395FF-FF0E6017/event/parking_lot_event_exit-0966595cdcdd11e2abf50013950e6017.json",
       "FileData": {
         "id": {
-          "fdPath": " /db/4044_MadGlory_Interactive/00000000-00000000-001395FF-FF0E6017/event/",
+          "fdPath": "/db/4044_MadGlory_Interactive/00000000-00000000-001395FF-FF0E6017/event/",
           "fdName": "parking_lot_event_exit-0966595cdcdd11e2abf50013950e6017.json"
         },
         "fdLastModifiedDate": "2013-10-21T19:34:56Z",

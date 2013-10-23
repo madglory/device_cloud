@@ -155,4 +155,9 @@ describe DeviceCloud::PushNotification::Message do
       end
     end
   end
+
+  describe "#topic_type" do
+    subject { DeviceCloud::PushNotification::Message.new single_raw_message }
+    its(:topic_type) { should eq(single_raw_message['topic'].split('/')[5]) }
+  end
 end

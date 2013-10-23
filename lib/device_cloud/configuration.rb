@@ -60,6 +60,21 @@ module DeviceCloud
       yield self
     end
 
+    def config
+      {
+        username: username,
+        password: password,
+        root_url: root_url,
+        alert_notification_handler: @alert_notification_handler,
+        empty_alert_notification_handler: @empty_alert_notification_handler,
+        data_notification_handler: @data_notification_handler,
+        empty_data_notification_handler: @empty_data_notification_handler,
+        event_notification_handler: @event_notification_handler,
+        empty_event_notification_handler: @empty_event_notification_handler,
+        logger: logger
+      }.freeze
+    end
+
     # DeviceCloud url
     #
     # @return the DeviceCloud url or the default of 'https://my.idigi.com' if not set.
