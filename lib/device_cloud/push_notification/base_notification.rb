@@ -9,7 +9,7 @@ module DeviceCloud
 
     def self.handle_no_content!(file_data)
       event = new(file_data)
-      event.hanlde_no_content!
+      event.handle_no_content!
     end
 
     def initialize(file_data)
