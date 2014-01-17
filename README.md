@@ -1,5 +1,7 @@
 # DeviceCloud
 
+[![Gem Version](https://badge.fury.io/rb/device_cloud.png)](http://badge.fury.io/rb/device_cloud)
+
 TODO:
 - remove any assumptions about Device Cloud FileData contents .. probably should only parse them if asked
 - add code for maintaining monitors 
