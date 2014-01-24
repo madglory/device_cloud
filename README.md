@@ -3,15 +3,9 @@
 #####TODO:
 
 * Add code for maintaining monitors
+* Add code for maintaining devices
 
 ## Installation
-
-    DeviceCloud.configure do |config|
-      config.root_url = 'https://my.idigi.com' # default
-      config.username
-      config.password
-    end
-
 Add this line to your application's Gemfile:
 
     gem 'device_cloud'
@@ -27,6 +21,13 @@ Or install it yourself as:
 ## Usage
 
 ### Configuration
+
+    DeviceCloud.configure do |config|
+      config.root_url = 'https://my.idigi.com' # default
+      config.username
+      config.password
+    end
+
 
 ### Handling Push Notifications
 
@@ -67,16 +68,16 @@ An example definition may look like the following
   "Document": {
     "Msg": {
       "timestamp": "2013-10-21T19:34:56Z",
-      "topic": "4044/FileData/db/4044_MadGlory_Interactive/00000000-00000000-001395FF-FF0E6017/event/parking_lot_event_exit-0966595cdcdd11e2abf50013950e6017.json",
+      "topic": "device/event/event.json",
       "FileData": {
         "id": {
-          "fdPath": "/db/4044_MadGlory_Interactive/00000000-00000000-001395FF-FF0E6017/event/",
-          "fdName": "parking_lot_event_exit-0966595cdcdd11e2abf50013950e6017.json"
+          "fdPath": "/device/event/",
+          "fdName": "event.json"
         },
         "fdLastModifiedDate": "2013-10-21T19:34:56Z",
         "fdSize": 545,
         "fdContentType": "application/json",
-        "fdData": "eyJ2YWx1ZSI6eyJwbGF0ZSI6Ijk0MUdWVCIsImNvbmZpZGVuY2UiOiI5OSIsImNvdW50cnkiOiJVUyIsInRvd2FyZHNfY2FtZXJhIjoiZmFsc2UiLCJ0aW1lc3RhbXAiOiIyMDEzLTEwLTIxVDE0OjM0OjQwWiIsIm92ZXJ2aWV3X2ltYWdlX2lkIjoibG90X292ZXJ2aWV3X2NhcF8xMF8yMV8yMDEzXzE0MzQ0MC5qcGciLCJzdGF0ZSI6Ik1OIiwicGF0Y2hfaW1hZ2VfaWQiOiJsb3RfcGF0Y2hfY2FwXzEwXzIxXzIwMTNfMTQzNDQwLmpwZyJ9LCJjbGFzcyI6ImV2ZW50IiwicXVldWVkX2R0IjoiMjAxMy0xMC0yMVQxOTozNDo1NloiLCJ0eXBlIjoicGFya2luZ19sb3RfZXZlbnRfZXhpdCIsImlkIjoiZGQ5ZDU3MzYzYTg3MTFlM2E5YmQwMDEzOTUwZTYwMTciLCJkZXZpY2VfaWQiOiJtOjAwMTM5NTBFNjAxNyJ9",
+        "fdData": "eW91IGhhdmUgdG9vIG11Y2ggZnJlZSB0aW1l\n",
         "fdArchive": false,
         "cstId": 4044,
         "fdType": "event",
