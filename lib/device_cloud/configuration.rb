@@ -53,7 +53,7 @@ module DeviceCloud
     #
     # Example:
     #
-    #   ActivityFeed.configure do |configuration|
+    #   DeviceCloud.configure do |configuration|
     #     configuration.root_url = 'https://example.com'
     #   end
     def configure

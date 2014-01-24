@@ -1,10 +1,16 @@
 # DeviceCloud
 
-TODO:
-- remove any assumptions about Device Cloud FileData contents .. probably should only parse them if asked
-- add code for maintaining monitors 
+#####TODO:
+
+* Add code for maintaining monitors
 
 ## Installation
+
+    DeviceCloud.configure do |config|
+      config.root_url = 'https://my.idigi.com' # default
+      config.username
+      config.password
+    end
 
 Add this line to your application's Gemfile:
 
@@ -20,9 +26,41 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Configuration
 
-## Example Push Notification
+### Handling Push Notifications
+
+When your application receives a push notification it can be passed to the DeviceCloud gem using the following:
+
+    push_notification = DeviceCloud::PushNotification(json['Document']['Msg'])
+    push_notification.handle_each!
+
+The event will then be handled by one of your defined Notification Handlers.
+
+### Notification Handlers
+
+Notification handlers take a Proc, and are called with a relevant alert or event object. A list of supported topic handlers are listed as follows:
+
+    alert_notification_handler
+    data_notification_handler
+    event_notification_handler
+
+The following empty notification handlers are also available:
+
+    empty_alert_notification_handler
+    empty_data_notification_handler
+    empty_event_notification_handler
+
+An example definition may look like the following
+
+    DeviceCloud.alert_notification_handler do |alert|
+       puts "#{alert.type} Alert: for device #{alert.device_id}
+       puts "Base 64 encoded data #{alert.raw_data}"
+    end
+
+
+### Example Push Notification
+
 
 ```json
 {
@@ -49,28 +87,6 @@ TODO: Write usage instructions here
       "group": "*"
     }
   }
-}
-```
-
-That notification's unencoded fdData:
-
-```json
-{
-  "value": {
-    "plate": "941GVT",
-    "confidence": "99",
-    "country": "US",
-    "towards_camera": "false",
-    "timestamp": "2013-10-21T14:34:40Z",
-    "overview_image_id": "lot_overview_cap_10_21_2013_143440.jpg",
-    "state": "MN",
-    "patch_image_id": "lot_patch_cap_10_21_2013_143440.jpg"
-  },
-  "class": "event",
-  "queued_dt": "2013-10-21T19:34:56Z",
-  "type": "parking_lot_event_exit",
-  "id": "dd9d57363a8711e3a9bd0013950e6017",
-  "device_id": "m:0013950E6017"
 }
 ```
 
