@@ -1,4 +1,5 @@
 require 'device_cloud/configuration'
+require 'device_cloud/device_core'
 require 'device_cloud/utils'
 require 'device_cloud/version'
 require 'device_cloud/push_notification'
