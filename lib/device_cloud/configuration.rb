@@ -86,7 +86,7 @@ module DeviceCloud
     #
     # @return the DeviceCloud username or raises an error
     def username
-      raise 'DeviceCloud username is blank' if @username.blank?
+      raise 'DeviceCloud username is blank' if @username.nil? || @username.empty?
       @username
     end
 
@@ -94,7 +94,7 @@ module DeviceCloud
     #
     # @return the DeviceCloud password or raises an error
     def password
-      raise 'DeviceCloud password is blank' if @password.blank?
+      raise 'DeviceCloud password is blank' if @password.nil? || @password.empty?
       @password
     end
 
