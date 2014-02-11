@@ -5,8 +5,7 @@
 [![wercker status](https://app.wercker.com/status/88a596a14228b6d5b8e7a57dd5d6db55/m/ "wercker status")](https://app.wercker.com/project/bykey/88a596a14228b6d5b8e7a57dd5d6db55)
 
 TODO:
-- remove any assumptions about Device Cloud FileData contents .. probably should only parse them if asked
-- add code for maintaining monitors
+- [ ] remove any assumptions about Device Cloud FileData contents .. probably should only parse them if asked
 
 ## Installation
 
@@ -61,13 +60,13 @@ That notification's unencoded fdData:
 ```json
 {
   "value": {
-    "plate": "941GVT",
+    "plate": "ECTO1",
     "confidence": "99",
     "country": "US",
     "towards_camera": "false",
     "timestamp": "2013-10-21T14:34:40Z",
     "overview_image_id": "lot_overview_cap_10_21_2013_143440.jpg",
-    "state": "MN",
+    "state": "NY",
     "patch_image_id": "lot_patch_cap_10_21_2013_143440.jpg"
   },
   "class": "event",
