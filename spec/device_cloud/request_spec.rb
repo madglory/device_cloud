@@ -1,19 +1,9 @@
 require 'spec_helper'
 
 describe DeviceCloud::Request do
-  let(:host) { 'example.com' }
   let(:path) { '/the/road/less/travelled' }
   let(:body) { 'badguts' }
-  let(:username) { 'foo' }
-  let(:password) { 'bar' }
-
-  before(:each) do
-    DeviceCloud.configure do |config|
-      config.username = username
-      config.password = password
-      config.root_url = "https://#{host}"
-    end
-  end
+  let(:request_uri) { "https://#{DeviceCloud.username}:#{DeviceCloud.password}@#{DeviceCloud.host}#{path}" }
 
   its(:path) { should be_nil }
   its(:body) { should be_nil }
@@ -27,7 +17,7 @@ describe DeviceCloud::Request do
 
   describe '#get' do
     before(:each) do
-      stub_request(:get, "https://#{username}:#{password}@#{host}#{path}").
+      stub_request(:get, request_uri).
         with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => "", :headers => {})
     end
@@ -39,7 +29,7 @@ describe DeviceCloud::Request do
 
   describe '#post' do
     before(:each) do
-      stub_request(:post, "https://#{username}:#{password}@#{host}#{path}").
+      stub_request(:post, request_uri).
         with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}, body: body).
         to_return(:status => 200, :body => "", :headers => {})
     end
@@ -51,7 +41,7 @@ describe DeviceCloud::Request do
 
   describe '#put' do
     before(:each) do
-      stub_request(:put, "https://#{username}:#{password}@#{host}#{path}").
+      stub_request(:put, request_uri).
         with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}, body: body).
         to_return(:status => 200, :body => "", :headers => {})
     end
@@ -63,7 +53,7 @@ describe DeviceCloud::Request do
 
   describe '#delete' do
     before(:each) do
-      stub_request(:delete, "https://#{username}:#{password}@#{host}#{path}").
+      stub_request(:delete, request_uri).
         with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => "", :headers => {})
     end
