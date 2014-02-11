@@ -128,3 +128,13 @@ TODO: write about Monitor class
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+### Development
+
+You can get a pry console by using the `:console` Rake task
+
+    $ rake console
+    
+You can also optionally pass your Device Cloud username and password like so
+
+    $ IDIGI_USERNAME=youruser IDIGI_PASSWORD=yourpass rake console
