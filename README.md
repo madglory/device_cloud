@@ -27,7 +27,6 @@ Or install it yourself as:
 ### Configuration
 
     DeviceCloud.configure do |config|
-      config.root_url = 'https://my.idigi.com' # default
       config.username = 'your idigi username'
       config.password = 'your idigi password'
     end
