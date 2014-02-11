@@ -26,23 +26,44 @@ Or install it yourself as:
 
 ### Configuration
 
-    DeviceCloud.configure do |config|
-      config.root_url = 'https://my.idigi.com' # default
-      config.username
-      config.password
-    end
+```ruby
+DeviceCloud.configure do |config|
+  config.username = 'your idigi username'
+  config.password = 'your idigi password'
+end
+# =>
+# {
+#   username: 'your idigi username,
+#   password: 'your idigi password',
+#   root_url: 'https://my.idigi.com',
+#   host: 'my.idigi.com',
+#   alert_notification_handler: nil,
+#   empty_alert_notification_handler: nil,
+#   data_notification_handler: nil,
+#   empty_data_notification_handler: nil,
+#   event_notification_handler: nil,
+#   empty_event_notification_handler: nil,
+#   logger: Logger.new(STDOUT) # default
+# }
+```
 
 
-### Handling Push Notifications
+### Push Notifications
 
-When your application receives a push notification it can be passed to the DeviceCloud gem using the following:
+`device_cloud` is currently only able to handle JSON push notifications via http, so your monitor must be set up accordingly. Read more about Monitors below.
 
-    push_notification = DeviceCloud::PushNotification(json['Document']['Msg'])
-    push_notification.handle_each!
+When your application receives an HTTP push notification, it can be passed to the DeviceCloud gem using the following:
+
+```ruby
+push_notification = DeviceCloud::PushNotification( http_response_body )
+# where http_response_body is a hash of the parsed JSON body content sent by DeviceCloud
+  
+push_notification.handle_each!
+```
 
 The event will then be handled by one of your defined Notification Handlers.
 
-### Notification Handlers
+#### Notification Handlers
 
 Notification handlers take a Proc, and are called with a relevant alert or event object. A list of supported topic handlers are listed as follows:
 
@@ -58,13 +79,14 @@ The following empty notification handlers are also available:
 
 An example definition may look like the following
 
-    DeviceCloud.alert_notification_handler do |alert|
-       puts "#{alert.type} Alert: for device #{alert.device_id}
-       puts "Base 64 encoded data #{alert.raw_data}"
-    end
+```ruby
+DeviceCloud.alert_notification_handler = Proc.new do |alert|
+  puts "#{alert.type} Alert: for device #{alert.device_id}"
+  puts "Base 64 encoded data #{alert.raw_data}"
+end
+```
 
-
-### Example Push Notification
+#### Example Push Notification
 
 
 ```json
@@ -95,6 +117,10 @@ An example definition may look like the following
 }
 ```
 
+### Monitors
+
+TODO: write about Monitor class
+
 ## Contributing
 
 1. Fork it
@@ -102,3 +128,13 @@ An example definition may look like the following
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+### Development
+
+You can get a pry console by using the `:console` Rake task
+
+    $ rake console
+    
+You can also optionally pass your Device Cloud username and password like so
+
+    $ IDIGI_USERNAME=youruser IDIGI_PASSWORD=yourpass rake console
