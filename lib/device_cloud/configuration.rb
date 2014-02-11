@@ -83,7 +83,7 @@ module DeviceCloud
     # DeviceCloud url
     #
     # @return the DeviceCloud host - 'my.idigi.com'
-    def root_url
+    def host
       'my.idigi.com'
     end
 
