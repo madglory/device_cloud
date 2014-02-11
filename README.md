@@ -28,8 +28,8 @@ Or install it yourself as:
 
     DeviceCloud.configure do |config|
       config.root_url = 'https://my.idigi.com' # default
-      config.username
-      config.password
+      config.username = 'your idigi username'
+      config.password = 'your idigi password'
     end
 
 
@@ -37,7 +37,7 @@ Or install it yourself as:
 
 When your application receives a push notification it can be passed to the DeviceCloud gem using the following:
 
-    push_notification = DeviceCloud::PushNotification(json['Document']['Msg'])
+    push_notification = DeviceCloud::PushNotification( http_response )
     push_notification.handle_each!
 
 The event will then be handled by one of your defined Notification Handlers.
@@ -58,7 +58,7 @@ The following empty notification handlers are also available:
 
 An example definition may look like the following
 
-    DeviceCloud.alert_notification_handler do |alert|
+    DeviceCloud.alert_notification_handler = Proc.new do |alert|
        puts "#{alert.type} Alert: for device #{alert.device_id}
        puts "Base 64 encoded data #{alert.raw_data}"
     end
