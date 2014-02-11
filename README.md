@@ -81,7 +81,7 @@ An example definition may look like the following
 
 ```ruby
 DeviceCloud.alert_notification_handler = Proc.new do |alert|
-  puts "#{alert.type} Alert: for device #{alert.device_id}
+  puts "#{alert.type} Alert: for device #{alert.device_id}"
   puts "Base 64 encoded data #{alert.raw_data}"
 end
 ```
