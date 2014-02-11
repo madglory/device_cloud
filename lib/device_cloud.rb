@@ -1,8 +1,6 @@
 require 'device_cloud/configuration'
 require 'device_cloud/utils'
 require 'device_cloud/version'
-require 'device_cloud/alarm'
-require 'device_cloud/alarm_template'
 require 'device_cloud/monitor'
 require 'device_cloud/push_notification'
 require 'device_cloud/push_notification/base_notification'
