@@ -2,8 +2,8 @@ module DeviceCloud
   class PushNotification
     attr_reader :messages
 
-    def initialize(raw_messages)
-      @messages = DeviceCloud::PushNotification::Message.parse_raw_messages(raw_messages)
+    def initialize(response_body)
+      @messages = DeviceCloud::PushNotification::Message.parse_raw_messages(response_body)
     end
 
     def handle_each!
