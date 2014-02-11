@@ -3,9 +3,6 @@ require 'logger'
 module DeviceCloud
   module Configuration
 
-    # DeviceCloud account root_url
-    attr_writer :root_url
-
     # DeviceCloud account username
     attr_writer :username
 
@@ -65,6 +62,7 @@ module DeviceCloud
         username: username,
         password: password,
         root_url: root_url,
+        host: host,
         alert_notification_handler: @alert_notification_handler,
         empty_alert_notification_handler: @empty_alert_notification_handler,
         data_notification_handler: @data_notification_handler,
@@ -77,16 +75,23 @@ module DeviceCloud
 
     # DeviceCloud url
     #
-    # @return the DeviceCloud url or the default of 'https://my.idigi.com' if not set.
+    # @return the DeviceCloud url - 'https://my.idigi.com'
     def root_url
-      @root_url ||= 'https://my.idigi.com'
+      'https://my.idigi.com'
+    end
+
+    # DeviceCloud url
+    #
+    # @return the DeviceCloud host - 'my.idigi.com'
+    def root_url
+      'my.idigi.com'
     end
 
     # DeviceCloud username
     #
     # @return the DeviceCloud username or raises an error
     def username
-      raise 'DeviceCloud username is blank' if @username.blank?
+      raise 'DeviceCloud username is blank' if @username.nil? || @password == ''
       @username
     end
 
@@ -94,7 +99,7 @@ module DeviceCloud
     #
     # @return the DeviceCloud password or raises an error
     def password
-      raise 'DeviceCloud password is blank' if @password.blank?
+      raise 'DeviceCloud password is blank' if @password.nil? || @password == ''
       @password
     end
 
