@@ -1,5 +1,7 @@
 # DeviceCloud
 
+[![Gem Version](https://badge.fury.io/rb/device_cloud.png)](http://badge.fury.io/rb/device_cloud)
+
 [![wercker status](https://app.wercker.com/status/88a596a14228b6d5b8e7a57dd5d6db55/m/ "wercker status")](https://app.wercker.com/project/bykey/88a596a14228b6d5b8e7a57dd5d6db55)
 
 TODO:
