@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DeviceCloud::Request do
   let(:path) { '/the/road/less/travelled' }
   let(:body) { 'badguts' }
-  let(:request_uri) { "https://#{DeviceCloud.username}:#{DeviceCloud.password}@#{DeviceCloud.host}#{path}" }
+  let(:request_uri) { authenticated_host + path }
 
   its(:path) { should be_nil }
   its(:body) { should be_nil }

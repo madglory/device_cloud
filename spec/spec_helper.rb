@@ -12,6 +12,10 @@ def idigi_password
   'barpass'
 end
 
+def authenticated_host
+  "https://#{DeviceCloud.username}:#{DeviceCloud.password}@#{DeviceCloud.host}"
+end
+
 RSpec.configure do |config|
   config.mock_with :rspec
 
