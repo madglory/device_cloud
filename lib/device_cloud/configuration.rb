@@ -55,6 +55,7 @@ module DeviceCloud
     #   end
     def configure
       yield self
+      config
     end
 
     def config
