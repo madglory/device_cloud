@@ -1,8 +1,10 @@
 # DeviceCloud
 
+[![wercker status](https://app.wercker.com/status/88a596a14228b6d5b8e7a57dd5d6db55/m/ "wercker status")](https://app.wercker.com/project/bykey/88a596a14228b6d5b8e7a57dd5d6db55)
+
 TODO:
 - remove any assumptions about Device Cloud FileData contents .. probably should only parse them if asked
-- add code for maintaining monitors 
+- add code for maintaining monitors
 
 ## Installation
 
