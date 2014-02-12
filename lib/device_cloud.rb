@@ -13,6 +13,7 @@ require 'device_cloud/push_notification/message'
 require 'device_cloud/push_notification/message/file_data'
 require 'device_cloud/request'
 require 'device_cloud/response'
+require 'nori'
 
 module DeviceCloud
   extend Configuration

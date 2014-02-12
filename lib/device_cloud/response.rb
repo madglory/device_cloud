@@ -10,6 +10,10 @@ module DeviceCloud
       @body = original_response.body
     end
 
+    def to_hash_from_xml
+      DeviceCloud.xml_parser.parse(body)
+    end
+
     def to_hash_from_json
       JSON.parse(body)
     end
