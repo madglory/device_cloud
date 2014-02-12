@@ -4,8 +4,8 @@ describe DeviceCloud::Group do
   describe '::all' do
     before(:each) do
       stub_request(:get, authenticated_host + '/ws/Group/.json').
-               with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
-               to_return(:status => 200, :body => groups_json, :headers => {})
+        with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
+        to_return(:status => 200, :body => groups_json, :headers => {})
     end
 
     subject { DeviceCloud::Group.all }
@@ -32,8 +32,8 @@ describe DeviceCloud::Group do
   describe '::find' do
     before(:each) do
       stub_request(:get, authenticated_host + '/ws/Group/123.json').
-               with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
-               to_return(:status => 200, :body => group_json, :headers => {})
+        with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
+        to_return(:status => 200, :body => group_json, :headers => {})
     end
 
     subject { DeviceCloud::Group.find 123 }
@@ -68,6 +68,45 @@ describe DeviceCloud::Group do
       end
 
       it { should be_nil }
+    end
+  end
+
+  describe '::find_all_by_parent_id' do
+    before(:each) do
+      stub_request(:get, authenticated_host + '/ws/Group/.json?condition=grpParentId=\'1\'').
+        with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
+        to_return(:status => 200, :body => group_json, :headers => {})
+    end
+
+    subject { DeviceCloud::Group.find_all_by_parent_id 1 }
+
+    context 'with result' do
+      let(:group_result) do
+        {"resultTotalRows"=>"1",
+         "requestedStartRow"=>"0",
+         "resultSize"=>"1",
+         "requestedSize"=>"1000",
+         "remainingSize"=>"0",
+         "items"=>
+          [{"grpId"=>"9769",
+            "grpDescription"=>"Describing this group.",
+            "grpName"=>"Your_Company",
+            "grpPath"=>"/Your_Company/Your_Group/",
+            "grpParentId"=>"1"}]}
+      end
+      let(:group_json) { group_result.to_json }
+
+      it { should be_a(Array) }
+      its(:first) { should be_a(DeviceCloud::Group) }
+      its(:size) { should eq 1 }
+    end
+
+    context 'with no results' do
+      let(:group_json) do
+        "{\"resultTotalRows\": \"0\",\"requestedStartRow\": \"0\",\"resultSize\": \"0\",\"requestedSize\": \"1000\",\"remainingSize\": \"0\",\"items\": [] }"
+      end
+
+      it { should eq [] }
     end
   end
 end

@@ -28,6 +28,20 @@ module DeviceCloud
 
         Group.new groups['items'].first
       end
+
+      def find_all_by_parent_id(parent_id)
+        parent_id = parent_id.to_i
+
+        path = "/ws/Group/.json?condition=grpParentId='#{parent_id}'"
+
+        groups = DeviceCloud::Request.new(path: path).get.to_hash_from_json
+
+        return [] unless groups['resultSize'].to_i > 0
+
+        groups['items'].map { |group|
+          Group.new group
+        }
+      end
     end
 
     def initialize(attributes = {})
