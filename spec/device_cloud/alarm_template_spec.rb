@@ -39,7 +39,7 @@ describe DeviceCloud::AlarmTemplate do
 
   describe '::all' do
     before(:each) do
-      stub_request(:get, "https://foouser:barpass@my.idigi.com/ws/AlarmTemplate/.json").
+      stub_request(:get, "https://foouser:barpass@my.idigi.com/ws/AlarmTemplate").
         with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => response_body, :headers => {})
     end
@@ -48,32 +48,36 @@ describe DeviceCloud::AlarmTemplate do
 
     context 'when results are found' do
       let(:response_body) do
-        {
-          "resultTotalRows" => "1",
-          "requestedStartRow" => "0",
-          "resultSize" => "1",
-          "requestedSize" => "1000",
-          "remainingSize" => "0",
-          "items" => [
-            {
-              "almtId" => "2",
-              "almtName" => "Device Offline",
-              "almtDescription" => "Detects when a device disconnects from Device Cloud and fails to reconnected within the specified time",
-              "grpId" => "1",
-              "almtTopic" => "Alarm.DeviceOffline",
-              "almtScopeOptions" => {
-                "ScopingOptions" => {
-                  "Scope" => ""
-                }
-              },
-              "almtRules" => {
-                "Rules" => {
-                  "FireRule" => { "Variable" => "" }, "ResetRule" => "" }
-              },
-              "almtResourceList" => "DeviceCore,AlarmStatus"
-            }
-          ]
-        }.to_json
+        %{<?xml version="1.0" encoding="ISO-8859-1"?>
+        <result>
+          <resultTotalRows>1</resultTotalRows>
+          <requestedStartRow>0</requestedStartRow>
+          <resultSize>1</resultSize>
+          <requestedSize>1000</requestedSize>
+          <remainingSize>0</remainingSize>
+          <AlarmTemplate>
+            <almtId>2</almtId>
+            <almtName>Device Offline</almtName>
+            <almtDescription>Detects when a device disconnects from Device Cloud and fails to reconnected within the specified time</almtDescription>
+            <grpId>1</grpId>
+            <almtTopic>Alarm.DeviceOffline</almtTopic>
+            <almtScopeOptions>
+              <ScopingOptions>
+                <Scope name="Group"/>
+              <Scope name="Device"/>
+            </ScopingOptions>
+            </almtScopeOptions>
+            <almtRules>
+              <Rules>
+                <FireRule name="fireRule1">
+                  <Variable name="reconnectWindowDuration" type="int"/>
+                </FireRule>
+                <ResetRule name="resetRule1"></ResetRule>
+              </Rules>
+            </almtRules>
+            <almtResourceList>DeviceCore,AlarmStatus</almtResourceList>
+          </AlarmTemplate>
+        </result>}
       end
 
       it { should be_a(Array) }
@@ -82,7 +86,16 @@ describe DeviceCloud::AlarmTemplate do
     end
 
     context 'when results are not found' do
-      let(:response_body) { "{\n    \"resultTotalRows\": \"0\",\n    \"requestedStartRow\": \"0\",\n    \"resultSize\": \"0\",\n    \"requestedSize\": \"1000\",\n    \"remainingSize\": \"0\",\n    \"items\": [\n    ]\n }\n" }
+      let(:response_body) do
+        %{<?xml version="1.0" encoding="ISO-8859-1"?>
+        <result>
+          <resultTotalRows>0</resultTotalRows>
+          <requestedStartRow>0</requestedStartRow>
+          <resultSize>0</resultSize>
+          <requestedSize>1000</requestedSize>
+          <remainingSize>0</remainingSize>
+        </result>}
+      end
 
       it { should eq [] }
     end
@@ -90,7 +103,7 @@ describe DeviceCloud::AlarmTemplate do
 
   describe '::find' do
     before(:each) do
-      stub_request(:get, "https://foouser:barpass@my.idigi.com/ws/AlarmTemplate/2.json").
+      stub_request(:get, "https://foouser:barpass@my.idigi.com/ws/AlarmTemplate/2").
         with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => response_body, :headers => {})
     end
@@ -99,14 +112,48 @@ describe DeviceCloud::AlarmTemplate do
 
     context 'when result is found' do
       let(:response_body) do
-        "{\n    \"resultTotalRows\": \"1\",\n    \"requestedStartRow\": \"0\",\n    \"resultSize\": \"1\",\n    \"requestedSize\": \"1000\",\n    \"remainingSize\": \"0\",\n    \"items\": [\n{ \"almtId\": \"2\", \"almtName\": \"Device Offline\", \"almtDescription\": \"Detects when a device disconnects from Device Cloud and fails to reconnected within the specified time\", \"grpId\": \"1\", \"almtTopic\": \"Alarm.DeviceOffline\", \"almtScopeOptions\": { \"ScopingOptions\": { \"Scope\": \"\", \"Scope\": \"\"}}, \"almtRules\": { \"Rules\": { \"FireRule\": { \"Variable\": \"\"}, \"ResetRule\": \"\"}}, \"almtResourceList\": \"DeviceCore,AlarmStatus\"}\n   ]\n }\n"
+        %{<?xml version="1.0" encoding="ISO-8859-1"?>
+        <result>
+          <resultTotalRows>1</resultTotalRows>
+          <requestedStartRow>0</requestedStartRow>
+          <resultSize>1</resultSize>
+          <requestedSize>1000</requestedSize>
+          <remainingSize>0</remainingSize>
+          <AlarmTemplate>
+            <almtId>2</almtId>
+            <almtName>Device Offline</almtName>
+            <almtDescription>Detects when a device disconnects from Device Cloud and fails to reconnected within the specified time</almtDescription>
+            <grpId>1</grpId>
+            <almtTopic>Alarm.DeviceOffline</almtTopic>
+            <almtScopeOptions>
+              <ScopingOptions>
+                <Scope name="Group"/>
+                <Scope name="Device"/>
+              </ScopingOptions>
+            </almtScopeOptions>
+            <almtRules>
+              <Rules>
+                <FireRule name="fireRule1">
+                  <Variable name="reconnectWindowDuration" type="int"/>
+                </FireRule>
+                <ResetRule name="resetRule1"></ResetRule>
+              </Rules>
+            </almtRules>
+            <almtResourceList>DeviceCore,AlarmStatus</almtResourceList>
+          </AlarmTemplate>
+        </result>}
       end
 
       it { should be_a(DeviceCloud::AlarmTemplate) }
     end
 
     context 'when result is not found' do
-      let(:response_body) { "{\n \"error\":  [\"GET AlarmTemplate error. Error reading AlarmTemplate entity id='2'\"]\n}" }
+      let(:response_body) do
+        %{<?xml version="1.0" encoding="ISO-8859-1"?>
+        <result>
+          <error>GET AlarmTemplate error. Error reading AlarmTemplate entity id='212'</error>
+        </result>}
+      end
 
       it { should be_nil }
     end

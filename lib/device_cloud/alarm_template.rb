@@ -5,21 +5,27 @@ module DeviceCloud
 
     class << self
       def all
-        templates = DeviceCloud::Request.new(path: '/ws/AlarmTemplate/.json').get.to_hash_from_json
+        response = DeviceCloud::Request.new(path: '/ws/AlarmTemplate').get
+        templates = response.to_hash_from_xml
 
-        return [] unless templates['resultSize'].to_i > 0
+        return [] unless response.code == '200' && templates['result']['resultSize'].to_i > 0
 
-        templates['items'].map { |template|
-          AlarmTemplate.new template
-        }
+        if templates['result']['resultSize'].to_i == 1
+          [AlarmTemplate.new(templates['result']['AlarmTemplate'])]
+        else
+          templates['result']['AlarmTemplate'].map { |template|
+            AlarmTemplate.new template
+          }
+        end
       end
 
       def find(id)
-        templates = DeviceCloud::Request.new(path: "/ws/AlarmTemplate/#{id}.json").get.to_hash_from_json
+        response = DeviceCloud::Request.new(path: "/ws/AlarmTemplate/#{id}").get
+        templates = response.to_hash_from_xml
 
-        return nil unless templates['resultSize'].to_i > 0
+        return nil unless response.code == '200' && templates['result']['resultSize'].to_i == 1
 
-        AlarmTemplate.new templates['items'].first
+        AlarmTemplate.new(templates['result']['AlarmTemplate'])
       end
     end
 
@@ -27,11 +33,6 @@ module DeviceCloud
       attributes.each do |name, value|
         instance_variable_set("@#{name}", value)
       end
-    end
-
-  private
-    def almtId=(value)
-      @almtId = value.to_i
     end
   end
 end
