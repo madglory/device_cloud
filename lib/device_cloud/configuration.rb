@@ -110,5 +110,19 @@ module DeviceCloud
     def logger
       @logger ||= Logger.new(STDOUT)
     end
+
+    # DeviceCloud logger
+    #
+    # @return the DeviceCloud logger or set the default to stdout
+    def logger
+      @logger ||= Logger.new(STDOUT)
+    end
+
+    # DeviceCloud xml_parser
+    #
+    # @return the DeviceCloud xml_parser - default is Nori using rexml
+    def xml_parser
+      Nori.new(parser: :rexml)
+    end
   end
 end
