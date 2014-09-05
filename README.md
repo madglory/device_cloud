@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/device_cloud.png)](http://badge.fury.io/rb/device_cloud)
 
-[![wercker status](https://app.wercker.com/status/88a596a14228b6d5b8e7a57dd5d6db55/m/ "wercker status")](https://app.wercker.com/project/bykey/88a596a14228b6d5b8e7a57dd5d6db55)
+[![wercker status](https://app.wercker.com/status/fbe1305b95a39025dbd8101de79226b6/m "wercker status")](https://app.wercker.com/project/bykey/fbe1305b95a39025dbd8101de79226b6)
 
 #####TODO:
 
